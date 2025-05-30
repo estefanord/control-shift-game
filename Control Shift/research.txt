@@ -1,0 +1,33 @@
+-Control Shift-
+
+Conceptual Framework:
+
+"Control Shift" explores the intersection of player agency, interface design, and control subversion as artistic expression. The primary statement is made through manipulating the player's relationship with the game controls.
+
+Precedents/Influences:
+
+1. Undertale (Toby Fox, 2015)
+   - The globally popular game regularly subverts players expectations about agency
+   - The bullet-hell segments that change the rules of engagement influenced the color palette and overall aesthetic of friendly hostility
+   - The game's meta-commentary on choice inspired the story-like room narrative (to be implemented fully)
+
+2. WarioWare Series (Nintendo, 2003-present)
+   - Rapid-fire mini-games that constantly change control schemes
+   - Is funny and challenges you through the interface 
+   - Inspired the room-by-room approach to shifting controls
+
+3. Experimental Art
+   - Jodi's web art (1990s) 
+
+Aesthetics:
+
+1. Pastel Colors
+   - Pink pastel elements inspired by vaporwave 
+   - Juxtaposition of soft colors against dark backgrounds creates tension for the player
+   - Color as wayfinding: to subtly guide players toward "getting" the new controls (to be implemented completely)
+
+2. Minimalism
+   - Less visual elements to emphasize the actual experience of control (and losing control)
+   - Simple geometric shapes focus attention on movement/interaction
+
+The 8-bit aesthetic is a personal choice as I particularly like how it reminds me of old games.

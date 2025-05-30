@@ -1,0 +1,96 @@
+# Control Shift: Interface Subversion as Artistic Expression
+## Research Document for Media Art
+
+### Conceptual Framework
+
+"Control Shift" explores the intersection of player agency, interface design, and control subversion as artistic expression. This research document explores the artistic and theoretical foundations that would be necessary for creating an interactive experience where the primary artistic statement is made through manipulating the player's relationship with controls.
+
+### Artistic Precedents and Influences
+
+1. **Undertale (Toby Fox, 2015)**
+   - Toby Fox's groundbreaking indie game regularly subverts player expectations about control and agency
+   - The bullet-hell segments that change the rules of engagement influenced our color palette and the overall aesthetic of friendly hostility
+   - The game's meta-commentary on player choice provided inspiration for how control manipulation can tell a story
+
+2. **The Stanley Parable (Davey Wreden, 2013)**
+   - Explores notions of player agency versus designer control
+   - Uses narration and environmental design to constantly reframe the player's understanding of choice
+   - The tension between player freedom and game constraints informed our design philosophy
+
+3. **WarioWare Series (Nintendo, 2003-present)**
+   - Rapid-fire mini-games that constantly change control schemes
+   - Creates humor and challenge through interface instability
+   - Informed our room-by-room approach to control shifts
+
+4. **Experimental Interface Art**
+   - Jodi's web art (1990s) that deconstructs the expected behavior of web interfaces
+   - Mary Flanagan's "[GIANTJOYSTICK]" (2006) installation that questions physical interfaces
+   - Rafael Lozano-Hemmer's interactive installations that reframe audience control expectations
+
+### Theoretical Framework
+
+1. **Phenomenology of Control**
+   - Drawing from Maurice Merleau-Ponty's theories on embodiment
+   - The game controller/keyboard as a phenomenological extension of the player's body
+   - Disrupting this embodied relationship creates a form of "digital uncanny valley"
+
+2. **Interface Theory (Brenda Laurel, Alexander Galloway)**
+   - Interfaces as sites of power negotiation between user and system
+   - The political dimensions of interface transparency versus opacity
+   - Our game deliberately oscillates between transparency and opacity to create meaning
+
+3. **Procedural Rhetoric (Ian Bogost)**
+   - Games make arguments through their rule systems
+   - By changing control schemes, we create procedural statements about adaptability, learning, and resilience
+   - The player's struggle with controls becomes a metaphor for navigating changing social/technological landscapes
+
+### Color Theory and Visual Aesthetics
+
+1. **Pastel Color Palette**
+   - Pink pastel elements inspired by vaporwave aesthetics
+   - Juxtaposition of soft colors against dark backgrounds creates visual tension
+   - Color as wayfinding: using color to subtly guide players toward understanding new control schemes
+
+2. **Minimalist Design Philosophy**
+   - Reduction of visual elements to emphasize the experience of control
+   - Simple geometric shapes focus attention on movement and interaction
+   - Clarity in environment design contrasts with ambiguity in controls
+
+3. **Pixel Art and Digital Materiality**
+   - 8-bit aesthetic as a reference to gaming history
+   - Pixel art's inherent grid system mirrors the discrete nature of digital control systems
+   - Low-resolution art style emphasizes the constructed nature of digital experience
+
+### Sound Design Considerations
+
+1. **Auditory Feedback**
+   - Sound as reinforcement for understanding new control mechanics
+   - Using audio cues to suggest proper control usage
+   - The absence of explicit tutorial text increases reliance on audio-visual feedback
+
+2. **Musical Dissonance and Resolution**
+   - Soundtrack elements that mirror the player's journey from confusion to mastery
+   - Harmonic resolution as reward for adapting to new control schemes
+
+### Pedagogical Value in Media Art
+
+1. **Critical Play (Mary Flanagan)**
+   - Games as environments for questioning assumptions
+   - Play as a means of exploring complex ideas about agency and control
+   - Student creation of alternative control schemes as artistic expression
+
+2. **Media Literacy Through Interface Disruption**
+   - By making interfaces strange, we highlight their usually invisible presence
+   - Players develop critical awareness of their relationships with technological interfaces
+   - Connection to broader media art goals of technological demystification
+
+3. **Accessibility Considerations**
+   - The tension between artistic subversion and inclusive design
+   - Strategies for balancing experimental interfaces with player frustration
+   - The artistic value of frustration versus the ethical considerations of design
+
+### Conclusion
+
+"Control Shift" represents a playful investigation into how interface manipulation can create meaning. By changing control schemes between rooms, the game transforms the usually transparent medium of control into the message itself. This approach links the project to broader traditions in media art that seek to make the invisible visible, turning the mundane aspects of technology into sites for artistic expression and critical reflection.
+
+The research conducted for this project spans game studies, phenomenology, interface theory, and visual design, demonstrating how interactive media can function simultaneously as entertainment and artistic statement. As players navigate the changing landscape of controls, they engage with questions about adaptability, embodiment, and the often unquestioned relationship between human and machine. 

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Shift</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        #gameCanvas {
+            border: 2px solid #FFB6C1;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(255, 182, 193, 0.3);
+            background: black;
+        }
+        
+        .game-info {
+            max-width: 800px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .controls {
+            background: rgba(255, 182, 193, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .controls h3 {
+            margin: 0 0 10px 0;
+            color: #FFB6C1;
+        }
+        
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            text-align: left;
+        }
+        
+        .level-description {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .level-description h3 {
+            margin: 0 0 10px 0;
+            color: #FFB6C1;
+        }
+        
+        .level-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 8px;
+            text-align: left;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Control Shift</h1>
+    <p>A platformer where each level changes how you control the character!</p>
+    
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    
+    <div class="game-info">
+        <div class="controls">
+            <h3>🎮 Controls</h3>
+            <div class="control-grid">
+                <div><strong>Move:</strong> Arrow Keys or WASD</div>
+                <div><strong>Jump:</strong> Space, W, or Up Arrow</div>
+                <div><strong>Level Select:</strong> Press L on title screen</div>
+                <div><strong>Quick Level Access:</strong> Press 1-7 in level select</div>
+            </div>
+        </div>
+        
+        <div class="level-description">
+            <h3>🎯 Room Types</h3>
+            <div class="level-list">
+                <div><strong>1. Normal Room:</strong> Standard platformer controls</div>
+                <div><strong>2. High Gravity:</strong> Increased gravity makes jumping harder</div>
+                <div><strong>3. Momentum:</strong> Slippery controls with momentum</div>
+                <div><strong>4. Reversed Controls:</strong> Left becomes right, right becomes left</div>
+                <div><strong>5. Random Platforms:</strong> Platforms change position constantly</div>
+                <div><strong>6. Delayed Input:</strong> Your inputs are delayed</div>
+                <div><strong>7. Final Challenge:</strong> All effects combined!</div>
+            </div>
+        </div>
+        
+        <p style="margin-top: 20px; color: #888;">
+            Click on the game area to focus, then press SPACE to start!
+        </p>
+    </div>
+    
+    <script src="game.js"></script>
+</body>
+</html> 

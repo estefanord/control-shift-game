@@ -1,0 +1,3 @@
+([('Control_Shift_Windows',
+   '/Users/estefanord/Desktop/game/dist/windows/Control_Shift_Windows',
+   'EXECUTABLE')],)

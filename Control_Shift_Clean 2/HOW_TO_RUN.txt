@@ -1,0 +1,18 @@
+CONTROL SHIFT - How to Run on macOS
+
+1. DOUBLE-CLICK "Control_Shift" to start the game
+
+2. If you get a security warning:
+   - Control-click (right-click) on "Control_Shift"
+   - Select "Open" from the menu
+   - Click "Open" when prompted
+   - The game will start normally
+
+3. Alternative method:
+   - Go to System Preferences > Security & Privacy
+   - Click "Open Anyway" if you see the option
+   - Then double-click the game again
+
+The game is safe but the warning appears because it's not from the Mac App Store.
+
+Have fun! 

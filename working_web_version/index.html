@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Shift - Web Version</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: monospace;
+            color: white;
+        }
+        #gameContainer {
+            text-align: center;
+        }
+        canvas {
+            border: 2px solid #333;
+            background: #000;
+            image-rendering: pixelated;
+        }
+        #gameInfo {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        #controls {
+            margin: 20px 0;
+            font-size: 12px;
+            max-width: 800px;
+        }
+        .button {
+            background: #333;
+            color: white;
+            border: 1px solid #666;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-family: monospace;
+        }
+        .button:hover {
+            background: #555;
+        }
+        #currentLevel {
+            color: #ff69b4;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <h1 style="color: #ff69b4; margin-bottom: 10px;">CONTROL SHIFT</h1>
+        <p style="margin-bottom: 20px;">Navigate through 7 rooms where your controls constantly change!</p>
+        
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <div id="gameInfo">
+            <div>Level: <span id="currentLevel">1</span> | Controls: <span id="currentControls">Normal</span></div>
+            <div id="levelDescription">Use Arrow Keys or WASD to move, Space to jump</div>
+        </div>
+        
+        <div id="controls">
+            <div><strong>Controls:</strong> Arrow Keys / WASD = Move | Space = Jump | R = Restart Level</div>
+            <div style="margin-top: 10px;">
+                <button class="button" onclick="startGame()">Start Game</button>
+                <button class="button" onclick="restartLevel()">Restart Level</button>
+                <button class="button" onclick="nextLevel()">Next Level</button>
+            </div>
+        </div>
+        
+        <div style="margin-top: 20px; font-size: 11px; color: #666;">
+            This is a simplified web version. For the full experience with music and advanced graphics,<br>
+            download the Windows or Mac version from itch.io
+        </div>
+    </div>
+
+    <script>
+        // Simple HTML5 Canvas Implementation of Control Shift
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Game state
+        let gameState = {
+            level: 1,
+            player: { x: 50, y: 500, width: 20, height: 20, velocityX: 0, velocityY: 0, onGround: false },
+            platforms: [],
+            goal: { x: 750, y: 550, width: 40, height: 40 },
+            controlMode: 'normal',
+            keys: {},
+            gameStarted: false,
+            levelComplete: false,
+            gravity: 0.5,
+            jumpPower: -12,
+            moveSpeed: 5
+        };
+        
+        // Level configurations
+        const levels = [
+            { name: "Normal", description: "Learn the basics - normal controls", controlMode: 'normal' },
+            { name: "Reversed", description: "Left is right, right is left!", controlMode: 'reversed' },
+            { name: "Delayed", description: "Your inputs are delayed", controlMode: 'delayed' },
+            { name: "Random", description: "Controls change randomly", controlMode: 'random' },
+            { name: "Momentum", description: "Slippery ice physics", controlMode: 'momentum' },
+            { name: "Gravity", description: "High gravity mode", controlMode: 'gravity' },
+            { name: "Final", description: "The ultimate challenge!", controlMode: 'final' }
+        ];
+        
+        // Input delay queue for delayed mode
+        let inputQueue = [];
+        let lastRandomSwitch = 0;
+        let randomControls = 'normal';
+        
+        // Initialize platforms for current level
+        function initLevel() {
+            gameState.platforms = [
+                { x: 0, y: 580, width: 800, height: 20 }, // Ground
+                { x: 200, y: 450, width: 100, height: 20 },
+                { x: 400, y: 350, width: 100, height: 20 },
+                { x: 600, y: 250, width: 100, height: 20 }
+            ];
+            
+            // Reset player position
+            gameState.player.x = 50;
+            gameState.player.y = 500;
+            gameState.player.velocityX = 0;
+            gameState.player.velocityY = 0;
+            gameState.levelComplete = false;
+            
+            // Set level-specific properties
+            const level = levels[gameState.level - 1];
+            gameState.controlMode = level.controlMode;
+            
+            // Adjust physics for special levels
+            if (gameState.controlMode === 'gravity') {
+                gameState.gravity = 0.8;
+                gameState.jumpPower = -15;
+            } else {
+                gameState.gravity = 0.5;
+                gameState.jumpPower = -12;
+            }
+            
+            // Update UI
+            updateUI();
+        }
+        
+        function updateUI() {
+            const level = levels[gameState.level - 1];
+            document.getElementById('currentLevel').textContent = gameState.level;
+            document.getElementById('currentControls').textContent = level.name;
+            document.getElementById('levelDescription').textContent = level.description;
+        }
+        
+        // Handle player input based on control mode
+        function handleInput() {
+            let leftPressed = gameState.keys['ArrowLeft'] || gameState.keys['a'] || gameState.keys['A'];
+            let rightPressed = gameState.keys['ArrowRight'] || gameState.keys['d'] || gameState.keys['D'];
+            let jumpPressed = gameState.keys[' '] || gameState.keys['ArrowUp'] || gameState.keys['w'] || gameState.keys['W'];
+            
+            // Apply control modifications
+            switch (gameState.controlMode) {
+                case 'reversed':
+                    [leftPressed, rightPressed] = [rightPressed, leftPressed];
+                    break;
+                    
+                case 'delayed':
+                    // Add current input to queue
+                    inputQueue.push({ left: leftPressed, right: rightPressed, jump: jumpPressed, time: Date.now() });
+                    // Use delayed input (500ms delay)
+                    const delayedInput = inputQueue.find(input => Date.now() - input.time > 500);
+                    if (delayedInput) {
+                        leftPressed = delayedInput.left;
+                        rightPressed = delayedInput.right;
+                        jumpPressed = delayedInput.jump;
+                        inputQueue = inputQueue.filter(input => input !== delayedInput);
+                    } else {
+                        leftPressed = rightPressed = jumpPressed = false;
+                    }
+                    break;
+                    
+                case 'random':
+                    // Switch controls randomly every 2 seconds
+                    if (Date.now() - lastRandomSwitch > 2000) {
+                        randomControls = Math.random() < 0.5 ? 'normal' : 'reversed';
+                        lastRandomSwitch = Date.now();
+                    }
+                    if (randomControls === 'reversed') {
+                        [leftPressed, rightPressed] = [rightPressed, leftPressed];
+                    }
+                    break;
+                    
+                case 'final':
+                    // Combine multiple effects
+                    [leftPressed, rightPressed] = [rightPressed, leftPressed]; // Reversed
+                    if (Math.random() < 0.1) { // Random chaos
+                        leftPressed = rightPressed = jumpPressed = Math.random() < 0.5;
+                    }
+                    break;
+            }
+            
+            // Apply movement
+            const moveSpeed = gameState.controlMode === 'momentum' ? gameState.moveSpeed * 0.3 : gameState.moveSpeed;
+            
+            if (leftPressed) {
+                if (gameState.controlMode === 'momentum') {
+                    gameState.player.velocityX -= 0.5;
+                } else {
+                    gameState.player.velocityX = -moveSpeed;
+                }
+            }
+            if (rightPressed) {
+                if (gameState.controlMode === 'momentum') {
+                    gameState.player.velocityX += 0.5;
+                } else {
+                    gameState.player.velocityX = moveSpeed;
+                }
+            }
+            
+            // Apply friction for momentum mode
+            if (gameState.controlMode === 'momentum') {
+                gameState.player.velocityX *= 0.95;
+            } else if (!leftPressed && !rightPressed) {
+                gameState.player.velocityX = 0;
+            }
+            
+            // Jumping
+            if (jumpPressed && gameState.player.onGround) {
+                gameState.player.velocityY = gameState.jumpPower;
+                gameState.player.onGround = false;
+            }
+        }
+        
+        // Update game physics
+        function updateGame() {
+            if (!gameState.gameStarted || gameState.levelComplete) return;
+            
+            handleInput();
+            
+            // Apply gravity
+            gameState.player.velocityY += gameState.gravity;
+            
+            // Update position
+            gameState.player.x += gameState.player.velocityX;
+            gameState.player.y += gameState.player.velocityY;
+            
+            // Keep player in bounds
+            if (gameState.player.x < 0) gameState.player.x = 0;
+            if (gameState.player.x > canvas.width - gameState.player.width) {
+                gameState.player.x = canvas.width - gameState.player.width;
+            }
+            
+            // Reset if falling off screen
+            if (gameState.player.y > canvas.height) {
+                restartLevel();
+                return;
+            }
+            
+            // Platform collision
+            gameState.player.onGround = false;
+            for (const platform of gameState.platforms) {
+                if (gameState.player.x < platform.x + platform.width &&
+                    gameState.player.x + gameState.player.width > platform.x &&
+                    gameState.player.y < platform.y + platform.height &&
+                    gameState.player.y + gameState.player.height > platform.y) {
+                    
+                    // Landing on top of platform
+                    if (gameState.player.velocityY > 0 && gameState.player.y < platform.y) {
+                        gameState.player.y = platform.y - gameState.player.height;
+                        gameState.player.velocityY = 0;
+                        gameState.player.onGround = true;
+                    }
+                }
+            }
+            
+            // Goal collision
+            if (gameState.player.x < gameState.goal.x + gameState.goal.width &&
+                gameState.player.x + gameState.player.width > gameState.goal.x &&
+                gameState.player.y < gameState.goal.y + gameState.goal.height &&
+                gameState.player.y + gameState.player.height > gameState.goal.y) {
+                
+                gameState.levelComplete = true;
+                setTimeout(() => {
+                    if (gameState.level < levels.length) {
+                        nextLevel();
+                    } else {
+                        alert('Congratulations! You completed all levels!');
+                        gameState.level = 1;
+                        initLevel();
+                    }
+                }, 1000);
+            }
+        }
+        
+        // Render game
+        function render() {
+            // Clear canvas
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            if (!gameState.gameStarted) {
+                // Draw start screen
+                ctx.fillStyle = '#ff69b4';
+                ctx.font = '48px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('CONTROL SHIFT', canvas.width / 2, canvas.height / 2 - 50);
+                
+                ctx.fillStyle = '#fff';
+                ctx.font = '16px monospace';
+                ctx.fillText('Click START GAME to begin!', canvas.width / 2, canvas.height / 2 + 20);
+                return;
+            }
+            
+            // Draw platforms
+            ctx.fillStyle = '#666';
+            for (const platform of gameState.platforms) {
+                ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+            }
+            
+            // Draw goal
+            ctx.fillStyle = '#00ff00';
+            ctx.fillRect(gameState.goal.x, gameState.goal.y, gameState.goal.width, gameState.goal.height);
+            
+            // Draw player
+            ctx.fillStyle = gameState.levelComplete ? '#ffff00' : '#ff69b4';
+            ctx.fillRect(gameState.player.x, gameState.player.y, gameState.player.width, gameState.player.height);
+            
+            // Draw level completion message
+            if (gameState.levelComplete) {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#00ff00';
+                ctx.font = '32px monospace';
+                ctx.textAlign = 'center';
+                ctx.fillText('Level Complete!', canvas.width / 2, canvas.height / 2);
+            }
+        }
+        
+        // Game loop
+        function gameLoop() {
+            updateGame();
+            render();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Control functions
+        function startGame() {
+            gameState.gameStarted = true;
+            gameState.level = 1;
+            initLevel();
+        }
+        
+        function restartLevel() {
+            initLevel();
+        }
+        
+        function nextLevel() {
+            if (gameState.level < levels.length) {
+                gameState.level++;
+                initLevel();
+            }
+        }
+        
+        // Event listeners
+        document.addEventListener('keydown', (e) => {
+            gameState.keys[e.key] = true;
+            if (e.key === 'r' || e.key === 'R') {
+                restartLevel();
+            }
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            gameState.keys[e.key] = false;
+        });
+        
+        // Initialize and start
+        initLevel();
+        gameLoop();
+    </script>
+</body>
+</html> 

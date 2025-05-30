@@ -1,0 +1,29 @@
+# Screen dimensions
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
+# Game settings
+FPS = 60
+GRAVITY = 0.8
+PLAYER_SPEED = 5
+JUMP_STRENGTH = -12
+
+# Colors (RGB values)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+GRAY = (100, 100, 100)
+LIGHT_GRAY = (200, 200, 200)
+PINK_PASTEL = (255, 182, 193)
+BLUE_PASTEL = (173, 216, 230)
+YELLOW_PASTEL = (255, 255, 204)
+GREEN_PASTEL = (204, 255, 204)
+PURPLE_PASTEL = (221, 160, 221)
+
+# Tile size
+TILE_SIZE = 32
+
+# Room constants
+ROOM_ROWS = 15
+ROOM_COLS = 25 

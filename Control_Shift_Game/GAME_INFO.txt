@@ -1,0 +1,41 @@
+CONTROL SHIFT
+=============
+
+A challenging platformer where your controls constantly change!
+
+🎮 ABOUT THE GAME:
+Navigate through 7 unique rooms, each with its own control twist:
+- Room 1: Normal controls (learn the basics)
+- Room 2: Reversed controls (left is right, right is left)
+- Room 3: Delayed input (your actions happen after a delay)
+- Room 4: Chaos mode (controls change randomly)
+- Room 5: Momentum physics (slippery ice-like movement)
+- Room 6: High gravity (everything falls faster)
+- Room 7: Final challenge (combination of all mechanics)
+
+🎵 FEATURES:
+- 7 original music tracks
+- Unique control mechanics for each room
+- Title screen and level selection
+- Engaging ending sequence with player choice
+- Challenging but fair gameplay
+
+🕹️ CONTROLS:
+- Arrow Keys: Move (when they work normally!)
+- Space: Start game, confirm choices
+- Numbers 1-7: Jump to specific levels
+
+⚠️ SYSTEM REQUIREMENTS:
+- macOS 10.13 or newer
+- No additional software required - just run the executable!
+
+🎯 HOW TO PLAY:
+1. Double-click "Control_Shift" to start
+2. Press any key on the title screen
+3. Choose your starting level or press Space for level 1
+4. Adapt to each room's unique control scheme
+5. Reach the end and make your final choice!
+
+Made with Python and Pygame.
+
+Enjoy the challenge! 🚀 

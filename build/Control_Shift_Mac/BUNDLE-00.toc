@@ -1,0 +1,3 @@
+([('Control_Shift_Mac',
+   '/Users/estefanord/Desktop/game/dist/mac/Control_Shift_Mac',
+   'EXECUTABLE')],)

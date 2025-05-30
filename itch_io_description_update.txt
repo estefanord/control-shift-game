@@ -1,0 +1,29 @@
+🎮 CONTROL SHIFT - Where Your Controls Betray You!
+
+Navigate through 7 challenging rooms where each level completely changes how you control your character!
+
+🌟 UNIQUE FEATURES:
+• 7 different control schemes that will test your adaptability
+• Room 1: Normal controls (learn the basics)
+• Room 2: Reversed controls (left is right!)  
+• Room 3: Delayed input (actions happen after a delay)
+• Room 4: Chaos mode (controls change randomly)
+• Room 5: Momentum physics (slippery movement)
+• Room 6: High gravity (everything falls faster)
+• Room 7: Final challenge (all mechanics combined)
+
+🎵 Complete with original soundtrack for each room!
+
+⚠️ **IMPORTANT FOR MAC USERS:**
+If you get a security warning when opening the game:
+1. Control-click (right-click) on "Control_Shift"
+2. Select "Open" from the menu
+3. Click "Open" when prompted
+4. The game will start normally
+
+This warning appears because the game isn't from the Mac App Store. The game is completely safe!
+
+🕹️ Controls: Arrow keys + Space (when they work as expected!)
+💻 Requirements: macOS 10.13 or newer
+
+Made with Python and Pygame. Can you master all 7 control schemes? 
