@@ -11,10 +11,10 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
     
@@ -33,7 +33,7 @@ jobs:
         powershell Compress-Archive -Path "dist/windows/*" -DestinationPath "packages/Control_Shift_Windows_PC.zip"
     
     - name: Upload Windows package
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: windows-executable
         path: packages/Control_Shift_Windows_PC.zip
@@ -41,10 +41,10 @@ jobs:
   build-macos:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
     
@@ -63,7 +63,7 @@ jobs:
         cd dist/mac && zip -r ../../packages/Control_Shift_macOS.zip . && cd ../..
     
     - name: Upload macOS package
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: macos-executable
         path: packages/Control_Shift_macOS.zip
@@ -71,10 +71,10 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
     
@@ -98,7 +98,7 @@ jobs:
         cd dist/linux && zip -r ../../packages/Control_Shift_Linux.zip . && cd ../..
     
     - name: Upload Linux package
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: linux-executable
         path: packages/Control_Shift_Linux.zip
@@ -106,7 +106,7 @@ jobs:
   create-web-version:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Create web version
       run: |
@@ -115,7 +115,7 @@ jobs:
         cd packages && zip Control_Shift_Web_Browser.zip index.html
     
     - name: Upload web version
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: web-version
         path: packages/Control_Shift_Web_Browser.zip
@@ -125,19 +125,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Download all artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
     
     - name: Combine all packages
       run: |
         mkdir final-packages
-        cp windows-executable/* final-packages/
-        cp macos-executable/* final-packages/
-        cp linux-executable/* final-packages/
-        cp web-version/* final-packages/
+        cp windows-executable/* final-packages/ 2>/dev/null || true
+        cp macos-executable/* final-packages/ 2>/dev/null || true
+        cp linux-executable/* final-packages/ 2>/dev/null || true
+        cp web-version/* final-packages/ 2>/dev/null || true
         ls -la final-packages/
     
     - name: Upload final release packages
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: all-platforms-release
         path: final-packages/ 
