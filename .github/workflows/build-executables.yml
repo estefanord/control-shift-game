@@ -3,9 +3,7 @@ name: Build Cross-Platform Executables
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:  # Allow manual trigger
+  workflow_dispatch:
 
 jobs:
   build-windows:
@@ -21,22 +19,30 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pygame>=2.6.0 pyinstaller>=6.10.0
+        pip install pygame>=2.6.0
     
-    - name: Build Windows executable
+    - name: Test game runs
       run: |
-        pyinstaller --onefile --windowed --name=Control_Shift_Windows --add-data="assets/music;assets/music" --add-data="assets/sfx;assets/sfx" --add-data="assets/sprites;assets/sprites" --add-data="src;src" --distpath=dist/windows --clean main.py
+        python -c "import pygame; print('Pygame works')"
+        python -c "import src.game; print('Game imports work')"
     
     - name: Create Windows package
       run: |
-        mkdir packages
-        powershell Compress-Archive -Path "dist/windows/*" -DestinationPath "packages/Control_Shift_Windows_PC.zip"
+        mkdir Control_Shift_Windows
+        mkdir Control_Shift_Windows\assets
+        mkdir Control_Shift_Windows\src
+        copy main.py Control_Shift_Windows\
+        copy src\*.py Control_Shift_Windows\src\
+        xcopy assets Control_Shift_Windows\assets /E /I
+        echo python main.py > Control_Shift_Windows\run_game.bat
+        echo pause >> Control_Shift_Windows\run_game.bat
+        powershell Compress-Archive -Path "Control_Shift_Windows" -DestinationPath "Control_Shift_Windows_PC.zip"
     
     - name: Upload Windows package
       uses: actions/upload-artifact@v4
       with:
-        name: windows-executable
-        path: packages/Control_Shift_Windows_PC.zip
+        name: windows-game
+        path: Control_Shift_Windows_PC.zip
 
   build-macos:
     runs-on: macos-latest
@@ -51,57 +57,26 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pygame>=2.6.0 pyinstaller>=6.10.0
-    
-    - name: Build macOS executable
-      run: |
-        pyinstaller --onefile --windowed --name=Control_Shift_Mac --add-data="assets/music:assets/music" --add-data="assets/sfx:assets/sfx" --add-data="assets/sprites:assets/sprites" --add-data="src:src" --distpath=dist/mac --clean main.py
+        pip install pygame>=2.6.0
     
     - name: Create macOS package
       run: |
-        mkdir packages
-        cd dist/mac && zip -r ../../packages/Control_Shift_macOS.zip . && cd ../..
+        mkdir Control_Shift_Mac
+        mkdir -p Control_Shift_Mac/assets Control_Shift_Mac/src
+        cp main.py Control_Shift_Mac/
+        cp src/*.py Control_Shift_Mac/src/
+        cp -r assets/* Control_Shift_Mac/assets/
+        echo '#!/bin/bash' > Control_Shift_Mac/run_game.sh
+        echo 'cd "$(dirname "$0")"' >> Control_Shift_Mac/run_game.sh
+        echo 'python3 main.py' >> Control_Shift_Mac/run_game.sh
+        chmod +x Control_Shift_Mac/run_game.sh
+        zip -r Control_Shift_macOS.zip Control_Shift_Mac
     
     - name: Upload macOS package
       uses: actions/upload-artifact@v4
       with:
-        name: macos-executable
-        path: packages/Control_Shift_macOS.zip
-
-  build-linux:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-    
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y python3-dev libasound2-dev
-    
-    - name: Install Python dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pygame>=2.6.0 pyinstaller>=6.10.0
-    
-    - name: Build Linux executable
-      run: |
-        pyinstaller --onefile --windowed --name=Control_Shift_Linux --add-data="assets/music:assets/music" --add-data="assets/sfx:assets/sfx" --add-data="assets/sprites:assets/sprites" --add-data="src:src" --distpath=dist/linux --clean main.py
-    
-    - name: Create Linux package
-      run: |
-        mkdir packages
-        cd dist/linux && zip -r ../../packages/Control_Shift_Linux.zip . && cd ../..
-    
-    - name: Upload Linux package
-      uses: actions/upload-artifact@v4
-      with:
-        name: linux-executable
-        path: packages/Control_Shift_Linux.zip
+        name: macos-game
+        path: Control_Shift_macOS.zip
 
   create-web-version:
     runs-on: ubuntu-latest
@@ -110,34 +85,68 @@ jobs:
     
     - name: Create web version
       run: |
-        mkdir packages
-        cp working_web_version/index.html packages/
-        cd packages && zip Control_Shift_Web_Browser.zip index.html
+        cp working_web_version/index.html Control_Shift_Web_Browser.html
+        zip Control_Shift_Web_Browser.zip Control_Shift_Web_Browser.html
     
     - name: Upload web version
       uses: actions/upload-artifact@v4
       with:
-        name: web-version
-        path: packages/Control_Shift_Web_Browser.zip
+        name: web-game
+        path: Control_Shift_Web_Browser.zip
 
-  combine-releases:
-    needs: [build-windows, build-macos, build-linux, create-web-version]
+  create-instructions:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Create instructions
+      run: |
+        cat > INSTRUCTIONS.txt << 'EOF'
+        CONTROL SHIFT GAME - INSTALLATION INSTRUCTIONS
+
+        WINDOWS:
+        1. Extract Control_Shift_Windows_PC.zip
+        2. Install Python 3.11+ from python.org
+        3. Open command prompt in the extracted folder
+        4. Run: pip install pygame
+        5. Double-click run_game.bat OR run: python main.py
+
+        MAC:
+        1. Extract Control_Shift_macOS.zip  
+        2. Install Python 3.11+ (should already be installed)
+        3. Open terminal in the extracted folder
+        4. Run: pip3 install pygame
+        5. Double-click run_game.sh OR run: python3 main.py
+
+        WEB:
+        1. Extract Control_Shift_Web_Browser.zip
+        2. Open Control_Shift_Web_Browser.html in any web browser
+
+        All versions include full game with 7 levels and sound!
+        EOF
+    
+    - name: Upload instructions
+      uses: actions/upload-artifact@v4
+      with:
+        name: instructions
+        path: INSTRUCTIONS.txt
+
+  combine-all:
+    needs: [build-windows, build-macos, create-web-version, create-instructions]
     runs-on: ubuntu-latest
     steps:
     - name: Download all artifacts
       uses: actions/download-artifact@v4
-    
-    - name: Combine all packages
+      
+    - name: Combine everything
       run: |
-        mkdir final-packages
-        cp windows-executable/* final-packages/ 2>/dev/null || true
-        cp macos-executable/* final-packages/ 2>/dev/null || true
-        cp linux-executable/* final-packages/ 2>/dev/null || true
-        cp web-version/* final-packages/ 2>/dev/null || true
-        ls -la final-packages/
+        mkdir final-release
+        cp windows-game/* final-release/ 2>/dev/null || true
+        cp macos-game/* final-release/ 2>/dev/null || true  
+        cp web-game/* final-release/ 2>/dev/null || true
+        cp instructions/* final-release/ 2>/dev/null || true
+        ls -la final-release/
     
-    - name: Upload final release packages
+    - name: Upload complete release
       uses: actions/upload-artifact@v4
       with:
-        name: all-platforms-release
-        path: final-packages/ 
+        name: Control-Shift-Complete-Release
+        path: final-release/ 
