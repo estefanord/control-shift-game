@@ -41,10 +41,8 @@ jobs:
     - name: Create Windows test package
       run: |
         mkdir Control_Shift_Windows_TEST
-        mkdir Control_Shift_Windows_TEST\assets
-        mkdir Control_Shift_Windows_TEST\src
         copy main.py Control_Shift_Windows_TEST\
-        copy src\*.py Control_Shift_Windows_TEST\src\
+        xcopy src Control_Shift_Windows_TEST\src /E /I
         xcopy assets Control_Shift_Windows_TEST\assets /E /I
         echo @echo off > Control_Shift_Windows_TEST\run_game.bat
         echo echo Starting Control Shift Game... >> Control_Shift_Windows_TEST\run_game.bat
@@ -60,6 +58,7 @@ jobs:
         print('Files:', os.listdir('.'))
         print('Assets:', os.listdir('assets'))
         print('Source:', os.listdir('src'))
+        print('Rooms:', os.listdir('src/rooms'))
         
         # Test game can run from package
         os.environ['SDL_VIDEODRIVER'] = 'dummy'
@@ -98,10 +97,9 @@ jobs:
     - name: Create macOS package
       run: |
         mkdir Control_Shift_Mac
-        mkdir -p Control_Shift_Mac/assets Control_Shift_Mac/src
         cp main.py Control_Shift_Mac/
-        cp src/*.py Control_Shift_Mac/src/
-        cp -r assets/* Control_Shift_Mac/assets/
+        cp -r src Control_Shift_Mac/
+        cp -r assets Control_Shift_Mac/
         echo '#!/bin/bash' > Control_Shift_Mac/run_game.sh
         echo 'cd "$(dirname "$0")"' >> Control_Shift_Mac/run_game.sh
         echo 'echo "Starting Control Shift Game..."' >> Control_Shift_Mac/run_game.sh
